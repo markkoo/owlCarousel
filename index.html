@@ -9,18 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
 </head>
 
-<body>
+<body id="body">
     <div class="owl-carousel owl-theme">
-        <div class="item">
+        <div class="item" data-number="1">
             <h4>1</h4>
         </div>
-        <div class="item">
+        <div class="item" data-number="2">
             <h4>2</h4>
         </div>
-        <div class="item">
+        <div class="item" data-number="3">
             <h4>3</h4>
         </div>
-        <div class="item">
+        <!-- <div class="item">
             <h4>4</h4>
         </div>
         <div class="item">
@@ -46,7 +46,7 @@
         </div>
         <div class="item">
             <h4>12</h4>
-        </div>
+        </div> -->
     </div>
 
 
@@ -55,15 +55,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
 
     <script>
+
+
         const owl = $('.owl-carousel').owlCarousel({
-            loop: false,
+            loop: true,
             margin: 10,
             nav: true,
-            items:1
+            items: 1
         })
-        owl.on('changed.owl.carousel', function (event) {
-            console.log(event.item.index);
+        // owl.on('changed.owl.carousel', function (event) {
+        //     console.log(event.item.index);
+        // });
+
+        const rootElem = document.getElementById('body');
+        let callback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    console.log('in entry.target', entry.target.dataset.number);
+                    //observerRoot.unobserve(listElem);
+                } else {
+                    // console.log('out entry.target.data', entry.target.dataset.number);
+                }
+                // Each entry describes an intersection change for one observed
+                // target element:
+                //   entry.boundingClientRect
+                //   entry.intersectionRatio
+                //   entry.intersectionRect
+                //   entry.isIntersecting
+                //   entry.rootBounds
+                //   entry.target
+                //   entry.time
+            });
+        };
+
+        let observerRoot = new IntersectionObserver(callback, {
+            root: rootElem,
+            rootMargin: '0px 0px 0px 0px',
+            threshold: [0]
         });
+
+        document.querySelectorAll('.item').forEach((elem, index) => {
+            observerRoot.observe(elem);
+        });
+
     </script>
 </body>
 
